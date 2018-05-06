@@ -13,7 +13,6 @@ Result will contain:
 
 import os
 import subprocess
-# import getpass
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -21,7 +20,7 @@ def get_systemd_time(name):
     command = [
         'systemctl',
         'show',
-        '--property', 'ExecMainStartTimestamp',
+        '--property', 'ActiveEnterTimestamp',
     ]
 
     components = name.split(':', 2)
@@ -52,6 +51,9 @@ def get_file_time(name):
     components = name.split(':', 1)
     if components[0] == 'file':
         name = components[1]
+
+    name = os.path.expanduser(name)
+
     stat = os.stat(name)
     return stat.st_mtime
 
